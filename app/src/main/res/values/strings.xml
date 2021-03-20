@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BringMe</string>
+    <string name="google_secret_api_key">AIzaSyCo85H2NMySUj_Si3pZkznFvGH80rfPZ0k</string>
 </resources>
