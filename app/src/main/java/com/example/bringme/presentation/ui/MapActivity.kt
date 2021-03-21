@@ -1,51 +1,35 @@
 package com.example.bringme.presentation.ui
 
-import android.location.Location
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.example.bringme.R
-import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback {
+
+class MapActivity : FragmentActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
-    private lateinit var currentLocation: Location
-    private lateinit var locationRequest: LocationRequest
-    private lateinit var locationCallback: LocationCallback
-    private lateinit var locationSettingsRequest: LocationSettingsRequest
-    private lateinit var settingsClient: SettingsClient
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map_google)
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        settingsClient = LocationServices.getSettingsClient(this)
-        buildLocationRequest()
-        buildLocationCallback()
-        buildLocationSettingsRequest()
-    }
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
-    private fun buildLocationSettingsRequest() {
-        var location = LocationSettingsRequest.Builder()
-        location.addLocationRequest(locationRequest)
-        locationSettingsRequest = location.build()
-    }
-
-    private fun buildLocationCallback() {
-    }
-
-    private fun buildLocationRequest() {
-        locationRequest.interval = 10_000
-        locationRequest.fastestInterval = 3_000
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+        mMap = googleMap
+        val sydney: LatLng = LatLng(21.0, 57.0)
+        mMap.addMarker(
+            MarkerOptions()
+                .position(sydney)
+                .title("Sydney point")
+        )
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 }
